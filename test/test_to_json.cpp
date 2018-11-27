@@ -1,41 +1,10 @@
 #define BOOST_TEST_MODULE to_json
+#include "shared_types.h"
 #include <boost/test/included/unit_test.hpp>
-#include <list>
-#include <map>
+#include <nlohmann/json.hpp>
 #include <meta_json/to_json.h>
-#include <string>
-#include <vector>
 
 using namespace std;
-
-struct Flat {
-  int a;
-  bool b;
-  string s;
-  double d;
-};
-
-struct Nested {
-  Flat f;
-  std::string x;
-};
-
-struct WithOptional {
-  std::optional<Flat> f;
-  std::string x;
-};
-
-struct WithContainers {
-  std::vector<double> d;
-  std::map<std::string, double> m;
-  std::map<std::string, Flat> n;
-  std::list<Flat> f;
-};
-
-BOOST_HANA_ADAPT_STRUCT(Flat, a, b, s, d);
-BOOST_HANA_ADAPT_STRUCT(Nested, f, x);
-BOOST_HANA_ADAPT_STRUCT(WithOptional, f, x);
-BOOST_HANA_ADAPT_STRUCT(WithContainers, d, m, n, f);
 
 template <typename T> void checker(nlohmann::json &json, const T &t) {
   boost::hana::for_each(boost::hana::keys(t), [&json, &t](auto name) {
@@ -55,7 +24,7 @@ template <typename T> void checker(nlohmann::json &json, const T &t) {
   });
 }
 
-BOOST_AUTO_TEST_SUITE(struct_to_json)
+BOOST_AUTO_TEST_SUITE(to_json)
 
 BOOST_AUTO_TEST_CASE(flat) {
   Flat f{32, true, "hi", 42.42};
@@ -82,9 +51,9 @@ BOOST_AUTO_TEST_CASE(with_containers) {
   WithContainers c{{1.0, 1.1, 1.2},
                    {{"a", 1.0}, {"b", 2.0}, {"c", 3.0}},
                    {
-                      {"a", {12, true, "insert", 4.2}},
-                      {"b", {13, false, "some", 2.4}},
-                      {"c", {14, false, "message", 0.2}},
+                       {"a", {12, true, "insert", 4.2}},
+                       {"b", {13, false, "some", 2.4}},
+                       {"c", {14, false, "message", 0.2}},
                    },
                    {
                        {12, false, "hello", 2.2},
