@@ -18,7 +18,7 @@ std::enable_if_t<boost::hana::Struct<T>::value, nlohmann::json> to_json(T const&
 // fundamental value or string serialization
 template<typename T>
 std::enable_if_t<std::is_fundamental<T>::value
-                || is_std_string<T>::value , nlohmann::json> to_json(T const &s) {
+                || is_std_string<T>::value, nlohmann::json> to_json(T const &s) {
   nlohmann::json json;
   json = s;
   return json;
