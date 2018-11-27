@@ -1,0 +1,15 @@
+build/
+docs/
+.kdev4/
+Doxyfile~
+*.kdev4
+*.user
+*.*~
+.DS_Store
+.Trash
+.com.apple.*
+*.orig
+.kdev_include_paths
+*.kate-swp
+*.swp
+compile_commands.json
