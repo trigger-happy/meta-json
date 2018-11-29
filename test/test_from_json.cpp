@@ -42,6 +42,32 @@ BOOST_AUTO_TEST_CASE(nested_structs) {
 }
 
 BOOST_AUTO_TEST_CASE(with_optional) {
+  {
+    nlohmann::json j = {{"x", "optional"}};
+
+    auto o = meta_json::from_json<WithOptional>(j);
+
+    BOOST_CHECK(o.x == "optional");
+    BOOST_CHECK(o.f == std::nullopt);
+  }
+
+  {
+    nlohmann::json j = {
+        {
+            "f",
+            {{"a", 32}, {"b", true}, {"s", "hello"}, {"d", 2.2}},
+        },
+        {"x", "optional"}};
+
+    auto o = meta_json::from_json<WithOptional>(j);
+    auto const &f = o.f.value();
+
+    BOOST_CHECK(o.x == "optional");
+    BOOST_CHECK(f.a == 32);
+    BOOST_CHECK(f.b == true);
+    BOOST_CHECK(f.s == "hello");
+    BOOST_CHECK(f.d == 2.2);
+  }
 }
 
 BOOST_AUTO_TEST_CASE(with_containers) {
