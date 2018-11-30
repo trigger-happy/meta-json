@@ -57,6 +57,33 @@ from_json(const nlohmann::json &j, const std::string &name) {
       } else {
         member = std::nullopt;
       }
+    } else if constexpr (is_stl_container<Member>::value) {
+      if constexpr (is_associative_container<Member>::value) {
+        if constexpr (std::is_fundamental<typename Member::value_type>::value
+            || std::is_same<typename Member::value_type, std::string>::value) {
+          std::for_each(std::begin((*jm)[memberName]), std::end((*jm)[memberName]),
+            [&member](auto const& i) {
+              member.emplace_back(i.key(), i.value());
+            });
+        } else {
+          //TODO implement me
+        }
+      } else {
+        using innerType = typename Member::value_type;
+
+        if constexpr (std::is_fundamental<innerType>::value
+            || std::is_same<innerType, std::string>::value) {
+
+          std::for_each(std::begin((*jm)[memberName]), std::end((*jm)[memberName]),
+            [&member](auto const &i) {
+              member.emplace_back(i);
+            });
+
+        } else {
+          //TODO implement me
+        }
+
+      }
     } else {
       member = from_json<Member>(*jm, memberName);
     }

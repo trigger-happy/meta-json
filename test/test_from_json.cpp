@@ -2,6 +2,13 @@
 #include "shared_types.h"
 #include <boost/test/included/unit_test.hpp>
 #include <meta_json/from_json.h>
+#include <boost/hana.hpp>
+
+struct SmallTest {
+  std::vector<double> d;
+};
+
+BOOST_HANA_ADAPT_STRUCT(SmallTest, d);
 
 BOOST_AUTO_TEST_SUITE(from_json)
 
@@ -71,6 +78,16 @@ BOOST_AUTO_TEST_CASE(with_optional) {
 }
 
 BOOST_AUTO_TEST_CASE(with_containers) {
+  nlohmann::json j = {
+    {"d", {1.1, 2.2, 3.3}},
+    {"m", {}},
+    {"n", {}},
+    {"f", {}}
+  };
+
+  auto c = meta_json::from_json<WithContainers>(j);
+
+  BOOST_CHECK(c.d[0] == 1.1);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
