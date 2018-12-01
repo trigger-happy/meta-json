@@ -1,6 +1,7 @@
 #ifndef CONTAINER_TYPE_TRAITS_H_H
 #define CONTAINER_TYPE_TRAITS_H_H
 
+#include <variant>
 #include <vector>
 #include <list>
 #include <unordered_set>
