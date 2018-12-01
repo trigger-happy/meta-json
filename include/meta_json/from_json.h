@@ -8,10 +8,12 @@
 
 namespace meta_json {
 
+// forward declaration for converting to hana adapted/defined structs
 template <typename T>
 std::enable_if_t<boost::hana::Struct<T>::value, T>
 from_json(const nlohmann::json &j, const std::string &name = "");
 
+// fundamental value or string serialization
 template <typename T>
 std::enable_if_t<std::is_fundamental<T>::value || is_std_string<T>::value, T>
 from_json(const nlohmann::json &j, const std::string &name) {
@@ -20,35 +22,27 @@ from_json(const nlohmann::json &j, const std::string &name) {
   return val;
 }
 
-template <typename T, typename U, template <class...> class C>
-std::enable_if_t<std::is_same<C<T, U>, std::pair<T, U>>::value, std::pair<T, U>>
-from_json(const nlohmann::json &j, const std::string &name) {
-  std::pair<T, U> val;
-
-  auto it = j[name].cbegin();
-  val.first = it.key();
-  val.second = it.value();
-
-  return val;
-}
-
+// for serializing into structs
 template <typename T>
 std::enable_if_t<boost::hana::Struct<T>::value, T>
 from_json(const nlohmann::json &j, const std::string &name) {
   T val;
   nlohmann::json const *jm = nullptr;
+  // access the inner json object if requested
   if (name.empty()) {
     jm = &j;
   } else {
     jm = &(j[name]);
   }
 
+  // loop through all the members of the struct
   boost::hana::for_each(boost::hana::keys(val), [&val, jm](auto name) {
     auto &member = boost::hana::at_key(val, name);
     using Member = std::decay_t<decltype(member)>;
     auto memberName = boost::hana::to<char const *>(name);
 
     if constexpr (is_optional<Member>::value) {
+      // optional members
       typedef typename Member::value_type innerType;
 
       auto iter = jm->find(memberName);
@@ -57,32 +51,38 @@ from_json(const nlohmann::json &j, const std::string &name) {
       } else {
         member = std::nullopt;
       }
+
     } else if constexpr (is_stl_container<Member>::value) {
+
+      // STL containers
+      auto const &innerJson = (*jm)[memberName];
+
       if constexpr (is_associative_container<Member>::value) {
-        if constexpr (std::is_fundamental<typename Member::value_type>::value
-            || std::is_same<typename Member::value_type, std::string>::value) {
-          std::for_each(std::begin((*jm)[memberName]), std::end((*jm)[memberName]),
-            [&member](auto const& i) {
-              member.emplace_back(i.key(), i.value());
-            });
-        } else {
-          //TODO implement me
+        // map-like container, one size fits all
+        using MappedType = typename Member::mapped_type;
+        for (auto i = innerJson.cbegin(); i != innerJson.cend(); ++i) {
+          member.emplace(i.key(), from_json<MappedType>(innerJson, i.key()));
         }
+
       } else {
+
+        // vector/list like container
         using innerType = typename Member::value_type;
+        if constexpr (std::is_fundamental<innerType>::value ||
+                      std::is_same<innerType, std::string>::value) {
 
-        if constexpr (std::is_fundamental<innerType>::value
-            || std::is_same<innerType, std::string>::value) {
-
-          std::for_each(std::begin((*jm)[memberName]), std::end((*jm)[memberName]),
-            [&member](auto const &i) {
-              member.emplace_back(i);
-            });
+          // read into a vector of fundamental/string objects
+          std::for_each(innerJson.cbegin(), innerJson.cend(),
+                        [&member](auto const &i) { member.emplace_back(i); });
 
         } else {
-          //TODO implement me
+          // vector of hana adapted structs
+          std::for_each(innerJson.cbegin(), innerJson.cend(),
+                        [&member](auto const jsonElement) {
+                          member.emplace_back(
+                              from_json<innerType>(jsonElement));
+                        });
         }
-
       }
     } else {
       member = from_json<Member>(*jm, memberName);
