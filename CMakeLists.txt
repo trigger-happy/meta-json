@@ -61,7 +61,7 @@ configure_file(
 )
 
 install(
-    DIRECTORY ${META_JSON_INCLUDE_BUILD_DIR}
+    DIRECTORY "${PROJECT_SOURCE_DIR}/include/"
     DESTINATION ${META_JSON_INCLUDE_INSTALL_DIR}
 )
 install(
