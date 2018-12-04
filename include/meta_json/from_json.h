@@ -92,6 +92,13 @@ from_json(const nlohmann::json &j, const std::string &name) {
   return val;
 }
 
+template <typename T>
+std::enable_if_t<boost::hana::Struct<T>::value, T>
+from_json(const std::string &jsonString, const std::string &name = "") {
+  return from_json<T>(nlohmann::json::parse(jsonString), name);
+}
+
+
 } // namespace meta_json
 
 #endif // FROM_JSON_H

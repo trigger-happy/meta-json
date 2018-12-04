@@ -19,12 +19,22 @@ BOOST_AUTO_TEST_CASE(flat) {
     {"s", "hello"},
     {"d", 2.2}
   };
+  std::string jsonString = j.dump();
 
-  auto f = meta_json::from_json<Flat>(j);
-  BOOST_CHECK(f.a == 32);
-  BOOST_CHECK(f.b == true);
-  BOOST_CHECK(f.s == "hello");
-  BOOST_CHECK(f.d == 2.2);
+  {
+    auto f = meta_json::from_json<Flat>(j);
+    BOOST_CHECK(f.a == 32);
+    BOOST_CHECK(f.b == true);
+    BOOST_CHECK(f.s == "hello");
+    BOOST_CHECK(f.d == 2.2);
+  }
+  {
+    auto f = meta_json::from_json<Flat>(jsonString);
+    BOOST_CHECK(f.a == 32);
+    BOOST_CHECK(f.b == true);
+    BOOST_CHECK(f.s == "hello");
+    BOOST_CHECK(f.d == 2.2);
+  }
 }
 
 BOOST_AUTO_TEST_CASE(nested_structs) {
