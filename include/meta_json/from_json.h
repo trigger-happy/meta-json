@@ -13,12 +13,39 @@ template <typename T>
 std::enable_if_t<boost::hana::Struct<T>::value, T>
 from_json(const nlohmann::json &j, const std::string &name = "");
 
-// fundamental value or string serialization
+// read into strings
 template <typename T>
-std::enable_if_t<std::is_fundamental<T>::value || is_std_string<T>::value, T>
+std::enable_if_t<is_std_string<T>::value, T>
 from_json(const nlohmann::json &j, const std::string &name) {
   T val;
-  val = j[name];
+
+  if (j[name].is_string()) {
+    val = j[name];
+  } else if (j[name].is_boolean()) {
+    val = std::to_string((bool)j[name]);
+  } else if (j[name].is_number()) {
+    val = std::to_string((double)j[name]);
+  }
+
+  return val;
+}
+
+// read into numbers
+template <typename T>
+std::enable_if_t<std::is_fundamental<T>::value, T>
+from_json(const nlohmann::json &j, const std::string &name) {
+  T val;
+
+  if (j[name].is_string()) {
+    if constexpr (std::is_floating_point_v<T>) {
+      val = std::stod((std::string)j[name]);
+    } else if constexpr (std::is_integral_v<T>) {
+      val = std::stoi((std::string)j[name]);
+    }
+  } else {
+    val = j[name];
+  }
+
   return val;
 }
 

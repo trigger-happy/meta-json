@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(flat) {
 BOOST_AUTO_TEST_CASE(nested_structs) {
   nlohmann::json j = {
     {"f", {
-            {"a", 32},
+            {"a", "32"},
             {"b", true},
             {"s", "hello"},
             {"d", 2.2}
