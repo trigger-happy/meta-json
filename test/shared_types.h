@@ -19,10 +19,6 @@ struct Nested {
   std::string x;
 };
 
-struct Paired {
-  std::pair<std::string, int> p;
-};
-
 struct WithOptional {
   std::optional<Flat> f;
   std::string x;
@@ -37,7 +33,6 @@ struct WithContainers {
 
 BOOST_HANA_ADAPT_STRUCT(Flat, a, b, s, d);
 BOOST_HANA_ADAPT_STRUCT(Nested, f, x);
-BOOST_HANA_ADAPT_STRUCT(Paired, p);
 BOOST_HANA_ADAPT_STRUCT(WithOptional, f, x);
 BOOST_HANA_ADAPT_STRUCT(WithContainers, d, m, n, f);
 

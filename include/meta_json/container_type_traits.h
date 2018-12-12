@@ -35,9 +35,6 @@ template<typename... Args> struct is_variant<std::variant<Args...>> : std::true_
 template<typename T> struct is_optional : std::false_type{};
 template<typename... Args> struct is_optional<std::optional<Args...>> : std::true_type{};
 
-template<typename... Args> struct is_pair : std::false_type{};
-template<typename... Args> struct is_pair<std::pair<Args...>> : std::true_type{};
-
 }
 
 #endif //CONTAINER_TYPE_TRAITS_H_H

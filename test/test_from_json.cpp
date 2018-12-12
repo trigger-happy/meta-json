@@ -58,16 +58,6 @@ BOOST_AUTO_TEST_CASE(nested_structs) {
   BOOST_CHECK(n.x == "hi");
 }
 
-BOOST_AUTO_TEST_CASE(with_pair) {
-  nlohmann::json j = {
-    {"p", {"hello", 32}}
-  };
-
-  auto p = meta_json::from_json<Paired>(j);
-  BOOST_CHECK(p.p.first == "hello");
-  BOOST_CHECK(p.p.second == 32);
-}
-
 BOOST_AUTO_TEST_CASE(with_optional) {
   {
     nlohmann::json j = {{"x", "optional"}};

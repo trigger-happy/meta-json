@@ -49,18 +49,6 @@ from_json(const nlohmann::json &j, const std::string &name) {
   return val;
 }
 
-// specifically for std::pairs
-template <typename T>
-std::enable_if_t<is_pair<T>::value, T>
-from_json(const nlohmann::json &j, const std::string &name) {
-  T val;
-
-  val.first = j[name][0].get<typename T::first_type>();
-  val.second = j[name][1].get<typename T::second_type>();
-
-  return val;
-}
-
 // for serializing into structs
 template <typename T>
 std::enable_if_t<boost::hana::Struct<T>::value, T>
