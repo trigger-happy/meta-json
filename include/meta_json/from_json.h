@@ -49,6 +49,62 @@ from_json(const nlohmann::json &j, const std::string &name) {
   return val;
 }
 
+// read into associative containers
+template <typename T>
+std::enable_if_t<is_associative_container<T>::value, T>
+from_json(const nlohmann::json &j, const std::string &name) {
+  using MappedType = typename T::mapped_type;
+
+  T val;
+
+  for (auto i = j[name].cbegin(); i != j[name].cend(); ++i) {
+    val.emplace(i.key(), from_json<MappedType>(j[name], i.key()));
+  }
+
+  return val;
+}
+
+// read into vector/list like containers
+template <typename T>
+std::enable_if_t<is_vector_like_container<T>::value, T>
+from_json(const nlohmann::json &j, const std::string &name) {
+  using ValueType = typename T::value_type;
+
+  T val;
+
+  if constexpr (std::is_fundamental_v<ValueType> ||
+                std::is_same_v<ValueType, std::string>) {
+    // read into a vector of fundamental/string objects
+    std::for_each(j[name].cbegin(), j[name].cend(),
+                  [&val](auto const &i) { val.emplace_back(i); });
+  } else {
+    std::for_each(j[name].cbegin(), j[name].cend(),
+                  [&val](auto const jsonElement) {
+                    val.emplace_back(from_json<ValueType>(jsonElement));
+                  });
+  }
+
+  return val;
+}
+
+// optional stuff
+template <typename T>
+std::enable_if_t<is_optional<T>::value, T> from_json(const nlohmann::json &j,
+                                                     const std::string &name) {
+  using ValueType = typename T::value_type;
+
+  T val;
+
+  auto iter = j.find(name);
+  if (iter != j.end()) {
+    val = from_json<ValueType>(j, name);
+  } else {
+    val = std::nullopt;
+  }
+
+  return val;
+}
+
 // for serializing into structs
 template <typename T>
 std::enable_if_t<boost::hana::Struct<T>::value, T>
@@ -68,52 +124,7 @@ from_json(const nlohmann::json &j, const std::string &name) {
     using Member = std::decay_t<decltype(member)>;
     auto memberName = boost::hana::to<char const *>(name);
 
-    if constexpr (is_optional<Member>::value) {
-      // optional members
-      typedef typename Member::value_type innerType;
-
-      auto iter = jm->find(memberName);
-      if (iter != jm->end()) {
-        member = from_json<innerType>(*jm, memberName);
-      } else {
-        member = std::nullopt;
-      }
-
-    } else if constexpr (is_stl_container<Member>::value) {
-
-      // STL containers
-      auto const &innerJson = (*jm)[memberName];
-
-      if constexpr (is_associative_container<Member>::value) {
-        // map-like container, one size fits all
-        using MappedType = typename Member::mapped_type;
-        for (auto i = innerJson.cbegin(); i != innerJson.cend(); ++i) {
-          member.emplace(i.key(), from_json<MappedType>(innerJson, i.key()));
-        }
-
-      } else {
-
-        // vector/list like container
-        using innerType = typename Member::value_type;
-        if constexpr (std::is_fundamental<innerType>::value ||
-                      std::is_same<innerType, std::string>::value) {
-
-          // read into a vector of fundamental/string objects
-          std::for_each(innerJson.cbegin(), innerJson.cend(),
-                        [&member](auto const &i) { member.emplace_back(i); });
-
-        } else {
-          // vector of hana adapted structs
-          std::for_each(innerJson.cbegin(), innerJson.cend(),
-                        [&member](auto const jsonElement) {
-                          member.emplace_back(
-                              from_json<innerType>(jsonElement));
-                        });
-        }
-      }
-    } else {
-      member = from_json<Member>(*jm, memberName);
-    }
+    member = from_json<Member>(*jm, memberName);
   });
 
   return val;
@@ -124,7 +135,6 @@ std::enable_if_t<boost::hana::Struct<T>::value, T>
 from_json(const std::string &jsonString, const std::string &name = "") {
   return from_json<T>(nlohmann::json::parse(jsonString), name);
 }
-
 
 } // namespace meta_json
 

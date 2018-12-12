@@ -26,6 +26,10 @@ template<typename... Args> struct is_associative_container<std::map<Args...>> : 
 template<typename... Args> struct is_associative_container<std::multimap<Args...>> : std::true_type{};
 template<typename... Args> struct is_associative_container<std::unordered_map<Args...>> : std::true_type{};
 
+template<typename T> struct is_vector_like_container : std::false_type{};
+template<typename... Args> struct is_vector_like_container<std::vector<Args...>> : std::true_type{};
+template<typename... Args> struct is_vector_like_container<std::list<Args...>> : std::true_type{};
+
 template<typename T> struct is_std_string : std::false_type{};
 template<> struct is_std_string<std::string> : std::true_type{};
 
