@@ -31,10 +31,15 @@ struct WithContainers {
   std::list<Flat> f;
 };
 
+struct NestedContainers {
+  std::vector<std::vector<double>> d;
+};
+
 BOOST_HANA_ADAPT_STRUCT(Flat, a, b, s, d);
 BOOST_HANA_ADAPT_STRUCT(Nested, f, x);
 BOOST_HANA_ADAPT_STRUCT(WithOptional, f, x);
 BOOST_HANA_ADAPT_STRUCT(WithContainers, d, m, n, f);
+BOOST_HANA_ADAPT_STRUCT(NestedContainers, d);
 
 #endif // SHARED_TYPES_H
 

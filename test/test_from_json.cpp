@@ -156,4 +156,21 @@ BOOST_AUTO_TEST_CASE(with_containers) {
   BOOST_CHECK((c.f.begin())->a == 12);
 }
 
+BOOST_AUTO_TEST_CASE(with_nested_containers) {
+  nlohmann::json j = R"(
+    {
+      "d": [
+        [1, 2],
+        [3, 4]
+      ]
+    }
+  )"_json;
+
+  auto nc = meta_json::from_json<NestedContainers>(j);
+  BOOST_CHECK(nc.d[0][0] == 1);
+  BOOST_CHECK(nc.d[0][1] == 2);
+  BOOST_CHECK(nc.d[1][0] == 3);
+  BOOST_CHECK(nc.d[1][1] == 4);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

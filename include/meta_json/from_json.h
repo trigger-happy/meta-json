@@ -67,18 +67,25 @@ from_json(const nlohmann::json &j, const std::string &name) {
 // read into vector/list like containers
 template <typename T>
 std::enable_if_t<is_vector_like_container<T>::value, T>
-from_json(const nlohmann::json &j, const std::string &name) {
+from_json(const nlohmann::json &j, const std::string &name = "") {
   using ValueType = typename T::value_type;
+
+  nlohmann::json const *jm = nullptr;
+  if (name.empty()) {
+    jm = &j;
+  } else {
+    jm = &(j[name]);
+  }
 
   T val;
 
   if constexpr (std::is_fundamental_v<ValueType> ||
                 std::is_same_v<ValueType, std::string>) {
     // read into a vector of fundamental/string objects
-    std::for_each(j[name].cbegin(), j[name].cend(),
+    std::for_each(jm->cbegin(), jm->cend(),
                   [&val](auto const &i) { val.emplace_back(i); });
   } else {
-    std::for_each(j[name].cbegin(), j[name].cend(),
+    std::for_each(jm->cbegin(), jm->cend(),
                   [&val](auto const jsonElement) {
                     val.emplace_back(from_json<ValueType>(jsonElement));
                   });
