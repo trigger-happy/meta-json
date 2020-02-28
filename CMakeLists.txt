@@ -1,7 +1,9 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.16)
 project(meta_json VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED)
 
 option(BUILD_TESTS "Build unit tests" ON)
 
@@ -27,8 +29,8 @@ else()
 endif()
 
 
-find_package(Boost 1.68 REQUIRED COMPONENTS unit_test_framework)
-find_package(nlohmann_json 3.4.0 REQUIRED)
+find_package(Boost 1.72 CONFIG)
+find_package(nlohmann_json 3.7.3 REQUIRED)
 
 
 add_library(${META_JSON_TARGET_NAME} INTERFACE)

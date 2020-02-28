@@ -1,6 +1,6 @@
 [requires]
-nlohmann-json/3.4.0@trigger-happy/testing
-boost/1.68.0@conan/stable
+nlohmann_json/3.7.3
+boost/1.72.0
 
 [generators]
 cmake
