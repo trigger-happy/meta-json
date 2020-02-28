@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED)
 
 option(BUILD_TESTS "Build unit tests" ON)
-
+option(USE_EXTERNAL_JSON "Use external version of nlohmann_json library" OFF)
 
 set(META_JSON_TARGET_NAME               ${PROJECT_NAME})
 set(META_JSON_CONFIG_INSTALL_DIR        "lib/cmake/${PROJECT_NAME}" CACHE INTERNAL "")
@@ -30,8 +30,6 @@ endif()
 
 
 find_package(Boost 1.72 CONFIG)
-find_package(nlohmann_json 3.7.3 REQUIRED)
-
 
 add_library(${META_JSON_TARGET_NAME} INTERFACE)
 add_library(${PROJECT_NAME}::${META_JSON_TARGET_NAME} ALIAS ${META_JSON_TARGET_NAME})
@@ -51,6 +49,8 @@ if(BUILD_TESTS)
   enable_testing()
   add_subdirectory(test)
 endif()
+
+add_subdirectory(thirdparty)
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
