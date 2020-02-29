@@ -14,7 +14,7 @@ script:
 - sudo rm -rf build/*
 
 # generate coverage report
-- docker run --rm -v $(pwd)/coverage_report:/app -v $(pwd):/src triggerhappy/cppdev:latest
+- docker run --cap-add SYS_PTRACE --rm -v $(pwd)/coverage_report:/app -v $(pwd):/src triggerhappy/cppdev:latest
   bash -c "scripts/coverage_report.sh /app"
 - bash <(curl -s https://codecov.io/bash) -f coverage_report/coverage.json
 
