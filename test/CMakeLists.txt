@@ -12,7 +12,7 @@ set(
   ${Boost_INCLUDE_DIRS}
 )
 
-file(GLOB TEST_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
+file(GLOB TEST_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} test_*.cpp)
 foreach(testsrc ${TEST_SOURCES})
   string(REPLACE ".cpp" "" testname ${testsrc})
   add_executable(${testname} ${testsrc})
@@ -21,3 +21,14 @@ foreach(testsrc ${TEST_SOURCES})
   set_property(TARGET ${testname} PROPERTY CXX_STANDARD 17)
   add_test(NAME ${testname} WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin COMMAND ${testname})
 endforeach(testsrc ${TEST_SOURCES})
+
+# special case for the fuzzy test
+if(FUZZER_SANITIZER)
+  add_executable(fuzz_test fuzz_test.cpp)
+  target_compile_options(fuzz_test PUBLIC -fsanitize=fuzzer,address)
+  target_link_options(fuzz_test PUBLIC -fsanitize=fuzzer,address)
+  target_link_libraries(fuzz_test ${TEST_LIBS})
+  target_include_directories(fuzz_test PRIVATE ${TEST_INCLUDE_DIRS})
+  set_property(TARGET fuzz_test PROPERTY CXX_STANDARD 17)
+  add_test(NAME fuzz_test WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin COMMAND fuzz_test -runs=10000000 ${CMAKE_CURRENT_SOURCE_DIR}/fuzz_corpus)
+endif()

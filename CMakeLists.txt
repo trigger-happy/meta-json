@@ -9,6 +9,7 @@ option(BUILD_TESTS "Build unit tests" ON)
 option(USE_EXTERNAL_JSON "Use external version of nlohmann_json library" OFF)
 option(ENABLE_CLANG_TIDY "Run clang-tidy against all source files included in the build" "OFF")
 option(ENABLE_CLANG_FORMAT "Run clang-format against all source files included in the build" "OFF")
+option(FUZZER_SANITIZER "Enable the clang fuzzing engine and tests" OFF)
 
 set(META_JSON_TARGET_NAME               ${PROJECT_NAME})
 set(META_JSON_CONFIG_INSTALL_DIR        "lib/cmake/${PROJECT_NAME}" CACHE INTERNAL "")
