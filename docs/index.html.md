@@ -1,3 +1,12 @@
+---
+title: Meta JSON Reference
+
+language_tabs:
+  - cpp
+
+search: true
+---
+
 # Introduction
 
 A set of header only libraries that make it as DRY as possible to convert
