@@ -6,6 +6,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 mkdir -p build && \
     cd build && \
     conan install .. --build=missing && \
-    cmake .. -DCMAKE_BUILD_TYPE=Debug -DCLANG_CODE_COVERAGE=ON && \
+    cmake .. -DCMAKE_BUILD_TYPE=Debug -DCLANG_CODE_COVERAGE=ON -DFUZZER_SANITIZER=ON && \
     make && make test && \
     grcov --llvm . -t coveralls+ --token unused --commit-sha unused > $1/coverage.json
