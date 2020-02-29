@@ -1,0 +1,39 @@
+os: linux
+language: cpp
+services:
+- docker
+
+before_script:
+- mkdir -p build meta-json coverage_report; chmod a+rwX build meta-json coverage_report
+
+script:
+
+- docker run --rm -v $(pwd)/meta-json:/app -v $(pwd):/src triggerhappy/cppdev:latest
+  bash -c "scripts/build.sh /app"
+- tar cJf meta-json.tar.xz meta-json
+- sudo rm -rf build/*
+
+- docker run --rm -v $(pwd)/coverage_report:/app -v $(pwd):/src triggerhappy/cppdev:latest
+  bash -c "scripts/coverage_report.sh /app"
+- bash <(curl -s https://codecov.io/bash) -f coverage_report/coverage.json
+
+- PREVIOUS_TAG=$(git describe --abbrev=0 --tags `git rev-list --tags --skip=1 --max-count=1`)
+- STARTING_COMMIT=$(git log --pretty="%h" $PREVIOUS_TAG..HEAD | awk '/./{line=$0}
+  END{print line}')
+- docker run -v `pwd`:/src --rm -i triggerhappy/auto-changelog:latest auto-changelog
+  --starting-commit=$STARTING_COMMIT
+- cat CHANGELOG.md
+
+deploy:
+  draft: false
+  release_notes_file: CHANGELOG.md
+  tag_name: $TRAVIS_TAG
+  cleanup: false
+  edge: true
+  provider: releases
+  api_key:
+    secure: gHgB/SMjOe94yc7abjRoXQ8YKvB4QiDyqSH1UGZGWx3XqGJNTU4DjrQySjtv9jFGDmpOIe8ogc0tiS79ms5C4XX3mWAgEf61OKNqXpqAJH8jfgRgM5251+iu5PfTZdLJd4cSscE5eiRO4RKv694he2ILg3sbt2kJnS+wYkDJs/02aK1qOAeum2OmHGXuZY2QoyLmpf5EAWrIopWd+wVussAqXWGtdrgWEpxV2XmIyzYzDRu+UJPAJKe5CYtGwRg04s8OhzwZGChCO5f4AXulirG9Y5mv5MSA0UDGBdfBhtFrFjIfvWixNPlKpIOzq1V3GqiP2bEvCuvoaVx3De+4xEGf9Owm2aka+giNGhF9l9iWfPjbH8V4clK6fASWporcx4T4yLywS02EfioW+EGgFXJl2th0478DG3/ne7TLbP5nHP3qvW3qN69VUPPRfoiAbf8aSWJkOLkbo63C783vh4gF6MqUDDxZTuVvbemSyO0mnJBu2PcX53CnrZy0sLFiJvMm5d8Tpw2LHrPh8Lu7x5jT6PpDTAUqRHxkdn5QqjgRzjL0eeJqxIPkgnCZzyCQIAtoZZvW6jMwEnHs/4ArSTSJIyWS36KjwW4x/ubMp5a0Ah99cvIfDMJJKCSGkFUeXag90ZH6jRXulFFE7hQPQfgjTZz1mLBebETl4lykQkw=
+  file: meta-json.tar.xz
+  on:
+    tags: true
+    repo: trigger-happy/meta-json
