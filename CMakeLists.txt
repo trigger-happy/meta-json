@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED)
 
 option(BUILD_TESTS "Build unit tests" ON)
 option(USE_EXTERNAL_JSON "Use external version of nlohmann_json library" OFF)
+option(ENABLE_CLANG_TIDY "Run clang-tidy against all source files included in the build" "OFF")
+option(ENABLE_CLANG_FORMAT "Run clang-format against all source files included in the build" "OFF")
 
 set(META_JSON_TARGET_NAME               ${PROJECT_NAME})
 set(META_JSON_CONFIG_INSTALL_DIR        "lib/cmake/${PROJECT_NAME}" CACHE INTERNAL "")
@@ -28,6 +30,13 @@ else()
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 endif()
 
+# Code quality cmake modules
+if(EXISTS "${CMAKE_SOURCE_DIR}/cmake/clang_tools.cmake")
+  include(${CMAKE_SOURCE_DIR}/cmake/clang_tools.cmake)
+endif()
+if(EXISTS "${CMAKE_SOURCE_DIR}/cmake/cppcheck.cmake")
+  include(${CMAKE_SOURCE_DIR}/cmake/cppcheck.cmake)
+endif()
 
 find_package(Boost 1.72 CONFIG)
 
