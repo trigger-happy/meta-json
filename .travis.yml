@@ -28,7 +28,7 @@ script:
   bash -c "scripts/make_docs.sh"
 
 deploy:
-  - provider: pages:
+  - provider: pages
     skip_cleanup: true
     keep_history: true
     local_dir: build/docs
