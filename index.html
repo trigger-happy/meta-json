@@ -1,0 +1,333 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Meta JSON Reference</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight .gh {
+  color: #999999;
+}
+.highlight .sr {
+  color: #f6aa11;
+}
+.highlight .go {
+  color: #888888;
+}
+.highlight .gp {
+  color: #555555;
+}
+.highlight .gs {
+}
+.highlight .gu {
+  color: #aaaaaa;
+}
+.highlight .nb {
+  color: #f6aa11;
+}
+.highlight .cm {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #75715e;
+}
+.highlight .c1 {
+  color: #75715e;
+}
+.highlight .cs {
+  color: #75715e;
+}
+.highlight .c, .highlight .cd {
+  color: #75715e;
+}
+.highlight .err {
+  color: #960050;
+}
+.highlight .gr {
+  color: #960050;
+}
+.highlight .gt {
+  color: #960050;
+}
+.highlight .gd {
+  color: #49483e;
+}
+.highlight .gi {
+  color: #49483e;
+}
+.highlight .ge {
+  color: #49483e;
+}
+.highlight .kc {
+  color: #66d9ef;
+}
+.highlight .kd {
+  color: #66d9ef;
+}
+.highlight .kr {
+  color: #66d9ef;
+}
+.highlight .no {
+  color: #66d9ef;
+}
+.highlight .kt {
+  color: #66d9ef;
+}
+.highlight .mf {
+  color: #ae81ff;
+}
+.highlight .mh {
+  color: #ae81ff;
+}
+.highlight .il {
+  color: #ae81ff;
+}
+.highlight .mi {
+  color: #ae81ff;
+}
+.highlight .mo {
+  color: #ae81ff;
+}
+.highlight .m, .highlight .mb, .highlight .mx {
+  color: #ae81ff;
+}
+.highlight .sc {
+  color: #ae81ff;
+}
+.highlight .se {
+  color: #ae81ff;
+}
+.highlight .ss {
+  color: #ae81ff;
+}
+.highlight .sd {
+  color: #e6db74;
+}
+.highlight .s2 {
+  color: #e6db74;
+}
+.highlight .sb {
+  color: #e6db74;
+}
+.highlight .sh {
+  color: #e6db74;
+}
+.highlight .si {
+  color: #e6db74;
+}
+.highlight .sx {
+  color: #e6db74;
+}
+.highlight .s1 {
+  color: #e6db74;
+}
+.highlight .s {
+  color: #e6db74;
+}
+.highlight .na {
+  color: #a6e22e;
+}
+.highlight .nc {
+  color: #a6e22e;
+}
+.highlight .nd {
+  color: #a6e22e;
+}
+.highlight .ne {
+  color: #a6e22e;
+}
+.highlight .nf {
+  color: #a6e22e;
+}
+.highlight .vc {
+  color: #ffffff;
+}
+.highlight .nn {
+  color: #ffffff;
+}
+.highlight .nl {
+  color: #ffffff;
+}
+.highlight .ni {
+  color: #ffffff;
+}
+.highlight .bp {
+  color: #ffffff;
+}
+.highlight .vg {
+  color: #ffffff;
+}
+.highlight .vi {
+  color: #ffffff;
+}
+.highlight .nv {
+  color: #ffffff;
+}
+.highlight .w {
+  color: #ffffff;
+}
+.highlight {
+  color: #ffffff;
+}
+.highlight .n, .highlight .py, .highlight .nx {
+  color: #ffffff;
+}
+.highlight .ow {
+  color: #f92672;
+}
+.highlight .nt {
+  color: #f92672;
+}
+.highlight .k, .highlight .kv {
+  color: #f92672;
+}
+.highlight .kn {
+  color: #f92672;
+}
+.highlight .kp {
+  color: #f92672;
+}
+.highlight .o {
+  color: #f92672;
+}
+    </style>
+    <link href="stylesheets/screen-a1ce949a.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print-bccf8c07.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all-c5541673.js"></script>
+  </head>
+
+  <body class="index" data-languages="[&quot;cpp&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar-cad8cdcb.png" alt="Navbar" />
+      </span>
+    </a>
+    <div class="toc-wrapper">
+      <img src="images/logo-1e815a84.png" class="logo" alt="Logo" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="cpp">cpp</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <ul id="toc" class="toc-list-h1">
+          <li>
+            <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#caveat" class="toc-h2 toc-link" data-title="Caveat">Caveat</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#installation" class="toc-h1 toc-link" data-title="Installation">Installation</a>
+          </li>
+          <li>
+            <a href="#converting-to-json" class="toc-h1 toc-link" data-title="Converting to json">Converting to json</a>
+          </li>
+          <li>
+            <a href="#converting-from-json" class="toc-h1 toc-link" data-title="Converting from json">Converting from json</a>
+          </li>
+      </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id='introduction'>Introduction</h1>
+<p>A set of header only libraries that make it as DRY as possible to convert
+between JSON strings and C++ structs.</p>
+
+<p>The library depends on <a href="https://github.com/nlohmann/json">nlohmann-json</a>
+and <a href="https://www.boost.org/doc/libs/1_72_0/libs/hana/doc/html/index.html">boost-hana</a>
+to do the heavy lifting.</p>
+<h2 id='caveat'>Caveat</h2>
+<p>Compilation times will increase significantly when this library is used due to
+the extensive use of C++ templates and <code>constexpr</code> statements. If the
+increase in compilation times is unacceptable, then consider not using this
+library in your project.</p>
+<h1 id='installation'>Installation</h1>
+<p>You can use this library by adding it as a submodule in your own project and telling
+your project&#39;s <code>CMakeLists.txt</code> to include the library into your own project by
+using the <code>add_subdirectory</code> command.</p>
+
+<p>When building your targets, make sure you add this library as as part of the
+<code>target_link_libraries</code> command.</p>
+<pre class="highlight cmake tab-cmake"><code><span class="nb">find_package</span><span class="p">(</span>meta_json 1.0.0 REQUIRED<span class="p">)</span>
+
+<span class="nb">add_executable</span><span class="p">(</span>something something.cpp<span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span>something meta_json::meta_json<span class="p">)</span>
+</code></pre><h1 id='converting-to-json'>Converting to json</h1>
+<p>You can convert a a Hana adapted class/struct to a json string by using the
+<code>meta_json::to_json</code> function.</p>
+
+<blockquote>
+<p>Converting to json</p>
+</blockquote>
+<pre class="highlight cpp tab-cpp"><code><span class="cp">#include &lt;meta_json/to_json.h&gt;
+#include &lt;cassert&gt;
+</span>
+<span class="k">struct</span> <span class="n">Flat</span> <span class="p">{</span>
+  <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
+  <span class="kt">bool</span> <span class="n">b</span><span class="p">;</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span><span class="p">;</span>
+  <span class="kt">double</span> <span class="n">d</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">BOOST_HANA_ADAPT_STRUCT</span><span class="p">(</span><span class="n">Flat</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">);</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">Flat</span> <span class="n">f</span><span class="p">{</span><span class="mi">32</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="s">"hi"</span><span class="p">,</span> <span class="mf">42.42</span><span class="p">};</span>
+  <span class="k">auto</span> <span class="n">s</span> <span class="o">=</span> <span class="n">meta_json</span><span class="o">::</span><span class="n">to_json</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+
+  <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">json</span> <span class="o">=</span> <span class="s">R"({"a":32,"b":true,"d":2.2,"s":"hello"})"</span><span class="p">;</span>
+  <span class="n">assert</span><span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="n">json</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre><h1 id='converting-from-json'>Converting from json</h1>
+<p>You can convert a json string into a Hana adapted class/struct by using the
+<code>meta_json::from_json</code> function.</p>
+
+<blockquote>
+<p>Converting from json</p>
+</blockquote>
+<pre class="highlight cpp tab-cpp"><code><span class="cp">#include &lt;meta_json/from_json.h&gt;
+#include &lt;cassert&gt;
+</span>
+<span class="k">struct</span> <span class="n">Flat</span> <span class="p">{</span>
+  <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
+  <span class="kt">bool</span> <span class="n">b</span><span class="p">;</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span><span class="p">;</span>
+  <span class="kt">double</span> <span class="n">d</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">BOOST_HANA_ADAPT_STRUCT</span><span class="p">(</span><span class="n">Flat</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">);</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">json</span> <span class="o">=</span> <span class="s">R"({"a":32,"b":true,"d":2.2,"s":"hello"})"</span><span class="p">;</span>
+  <span class="k">auto</span> <span class="n">f</span> <span class="o">=</span> <span class="n">meta_json</span><span class="o">::</span><span class="n">from_json</span><span class="o">&lt;</span><span class="n">Flat</span><span class="o">&gt;</span><span class="p">(</span><span class="n">json</span><span class="p">);</span>
+
+  <span class="n">assert</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">a</span> <span class="o">==</span> <span class="mi">32</span><span class="p">);</span>
+  <span class="n">assert</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">b</span> <span class="o">==</span> <span class="nb">true</span><span class="p">);</span>
+  <span class="n">assert</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">s</span> <span class="o">==</span> <span class="s">"hello"</span><span class="p">);</span>
+  <span class="n">assert</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">d</span> <span class="o">==</span> <span class="mf">2.2</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="cpp">cpp</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
