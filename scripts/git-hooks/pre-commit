@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Run the all-format and all-tidy targets to enforce code quality
+cd build && \
+  make all-tidy && \
+  make all-format
+
+declare -i result=$?
+if [ $result != 0 ]; then
+  echo "Please fix the issues above before commiting your code"
+fi
+
+exit $result

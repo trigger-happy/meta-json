@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# output the commit message file and pipe it through sed and grep filters
+# so that only the commit message itself is passed to commitlint
+cat $1 | \
+  sed '/^\# ------------------------ >8 ------------------------/,$d' | \
+  grep -v '^\#' | \
+  docker run --rm -i triggerhappy/commitlint:latest
+
+exit $?
