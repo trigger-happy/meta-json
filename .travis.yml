@@ -7,16 +7,18 @@ before_script:
 - mkdir -p build meta-json coverage_report; chmod a+rwX build meta-json coverage_report
 
 script:
-
+# build for release
 - docker run --rm -v $(pwd)/meta-json:/app -v $(pwd):/src triggerhappy/cppdev:latest
   bash -c "scripts/build.sh /app"
 - tar cJf meta-json.tar.xz meta-json
 - sudo rm -rf build/*
 
+# generate coverage report
 - docker run --rm -v $(pwd)/coverage_report:/app -v $(pwd):/src triggerhappy/cppdev:latest
   bash -c "scripts/coverage_report.sh /app"
 - bash <(curl -s https://codecov.io/bash) -f coverage_report/coverage.json
 
+# make changelogs
 - PREVIOUS_TAG=$(git describe --abbrev=0 --tags `git rev-list --tags --skip=1 --max-count=1`)
 - STARTING_COMMIT=$(git log --pretty="%h" $PREVIOUS_TAG..HEAD | awk '/./{line=$0}
   END{print line}')
@@ -24,8 +26,8 @@ script:
   --starting-commit=$STARTING_COMMIT
 - cat CHANGELOG.md
 
-- docker run --rm -v $(pwd)/meta-json:/app -v $(pwd):/src triggerhappy/cppdev:latest
-  bash -c "scripts/make_docs.sh"
+# generate documentation
+- scripts/make_docs.sh
 
 deploy:
   - provider: pages
